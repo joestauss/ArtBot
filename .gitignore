@@ -1,1 +1,3 @@
 __pycache__/
+gitignored_login_info.py
+geckodriver.log
