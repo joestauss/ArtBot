@@ -1,0 +1,44 @@
+{
+ "ContentRecords": [
+  {
+   "subject": "Subject 1",
+   "post_text": "This is the text for post 1",
+   "hashtags": [
+    "oddHashTag"
+   ],
+   "image_file": "image_resource_1.jpg"
+  },
+  {
+   "subject": "Subject 2",
+   "post_text": "This is the text for post 2",
+   "hashtags": [
+    "evenHashTag"
+   ],
+   "image_file": "image_resource_2.jpg"
+  },
+  {
+   "subject": "Subject 3",
+   "post_text": "This is the text for post 3",
+   "hashtags": [
+    "oddHashTag"
+   ],
+   "image_file": "image_resource_3.jpg"
+  },
+  {
+   "subject": "Subject 1",
+   "post_text": "This is the text for post 4",
+   "hashtags": [
+    "evenHashTag"
+   ],
+   "image_file": "image_resource_4.jpg"
+  },
+  {
+   "subject": "Subject 2",
+   "post_text": "This is the text for post 5",
+   "hashtags": [
+    "oddHashTag"
+   ],
+   "image_file": "image_resource_5.jpg"
+  }
+ ]
+}
