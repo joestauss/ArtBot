@@ -7,6 +7,7 @@ from locators import SeleniumLocator
 import time
 from pathlib import Path
 import json
+from data_structures import *
 
 class SeleniumContext:
     #   SeleniumContext was taken from my other project,
@@ -37,41 +38,6 @@ class SeleniumContext:
         def __exit__(self, exc_type, exc_value, exc_traceback):
             self.driver.quit()
 
-class ContentRecord:
-    def __init__(self, subject, post_text, hashtags=[], image_file=None):
-        self.subject    = subject
-        self.post_text  = post_text
-        self.hashtags   = hashtags
-        self.image_file = image_file
-
-    def __str__(self):
-        data_dictionary = {
-            'subject'   : self.subject,
-            'post_text' : self.post_text,
-            'hashtags'  : self.hashtags,
-            'image_file': self.image_file
-        }
-        return json.dumps( data_dictionary, indent=1)
-
-    def from_data_dictionary( data_dictionary):
-        ''' Generates a ContentRecord object from a dictionary of values.
-
-        Parameters
-        ----------
-        data_dictionary: dict
-            {   "subject"   : str,
-                "post_text" : str,
-                "hashtags"  : [str],
-                "image_file": str  (for now, but a pathtype soon)
-            }
-        '''
-        return ContentRecord(
-            data_dictionary[ 'subject'],
-            data_dictionary[ 'post_text'],
-            hashtags=data_dictionary[ 'hashtags'],
-            image_file=data_dictionary[ 'image_file']
-        )
-
 class ArtBot:
     def __init__( self):
         self.content = []
@@ -83,20 +49,30 @@ class ArtBot:
         -----------
         json_string: str
             Has the following structure:
-            {   ContentRecords: [
-                {   "subject"   : str,
+            {   ContentRecords: [ {
+                    "subject"   : str,
                     "post_text" : str,
                     "hashtags"  : [str],
-                    "image_file": str    } ] }
+                    "image_file": str    } ]
+
+                PostHistory: [ {
+                    "subject"   : str
+                    "post_date" : str, formatted YYYY-MM-DD } ]
+            }
         '''
         data_dictionary = json.loads( json_string)
         artbot = ArtBot()
-        artbot.content = [ ContentRecord.from_data_dictionary( dd) for dd in data_dictionary[ 'ContentRecords'] ]
+        artbot.content = [ ContentRecord.from_data_dictionary( dd) for dd in data_dictionary[ 'ContentRecords']]
+        artbot.history = [ PostRecord.from_data_dictionary(    dd) for dd in data_dictionary[ 'PostHistory'   ]]
         return artbot
 
     @property
     def content_as_json( self):
-        return json.dumps( {'ContentRecords' : self.content})
+        return json.dumps( {'ContentRecords' : self.content, 'PostHistory' : self.history})
+
+    @property
+    def history_as_str( self):
+        return '\n'.join( [str(p) for p in sorted(self.history, key=lambda x: x.date)])
 
 class TwitterArtBot( ArtBot):
     def __init__( self):
@@ -127,8 +103,9 @@ class TwitterArtBot( ArtBot):
         login_button.click()
 
 if __name__=='__main__':
-    LOGIN_EXAMPLE = False
-    READING_EXAMPLE = True
+    LOGIN_EXAMPLE   = False
+    READING_EXAMPLE = False
+    HISTORY_EXAMPLE = True
 
     if LOGIN_EXAMPLE:
         account = TaglinesOfTerror()
@@ -137,7 +114,12 @@ if __name__=='__main__':
         artbot.text_post( "Blah blah blah, #hashtag #yayayaIAmLorde")
 
     if READING_EXAMPLE:
-        json_string = Path('Example_ArtBotContent.json').read_text()
+        json_string = Path('Example_ArtBot.json').read_text()
         artbot = ArtBot.from_json( json_string)
         for record in artbot.content:
             print( ("="*30) + str(record.post_text) +("="*30))
+
+    if HISTORY_EXAMPLE:
+        json_string = Path('Example_ArtBot.json').read_text()
+        artbot = ArtBot.from_json( json_string)
+        print( artbot.history_as_str)
