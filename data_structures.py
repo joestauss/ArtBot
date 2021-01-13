@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 
 class PostRecord:
     def __init__(self, subject=None, date=None):
@@ -29,6 +30,17 @@ class PostRecord:
             date    = dt.datetime.strptime(data_dictionary['post_date'], '%Y-%m-%d').date()
         )
 
+    @property
+    def data_dictionary( self):
+        return {
+            'subject'   : self.subject,
+            'post_date' : self.date.strftime('%Y-%m-%d')
+        }
+
+    @property
+    def as_json(self):
+        return json.dumps( self.data_dictionary, indent=1)
+
 class ContentRecord:
     def __init__(self, subject, post_text, hashtags=[], image_file=None):
         self.subject    = subject
@@ -37,13 +49,19 @@ class ContentRecord:
         self.image_file = image_file
 
     def __str__(self):
-        data_dictionary = {
+        return self.as_json
+
+    @property
+    def data_dictionary( self):
+        return     {
             'subject'   : self.subject,
             'post_text' : self.post_text,
             'hashtags'  : self.hashtags,
-            'image_file': self.image_file
-        }
-        return json.dumps( data_dictionary, indent=1)
+            'image_file': self.image_file}
+
+    @property
+    def as_json(self):
+        return json.dumps( self.data_dictionary, indent=1)
 
     def from_data_dictionary( data_dictionary):
         ''' Generates a ContentRecord object from a dictionary of values.
