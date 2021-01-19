@@ -1,6 +1,8 @@
 # ArtBot
 
-# Version Objectives
+Hello and welcome to the ArtBot repository!  This code is my toolkit for managing a Twitter bot, and I am currently using it to manage a single account, \@TaglinesOTerror, which has been operational since 19 January 2021.  This repository is organized into the following folders.
 
-* __0.2__ : Data model for post-content (including images) and post-history.  Implement select_post_subject() to test it.
-* __0.1__ : This project was separated from "Data Scraping and Browser Automation".
+* __ArtBot__ contains the actual code.  Login info and content are gitignored.
+* __depricated__ contains old versions of ArtBot.
+* __docs__ contains Markdown documents and Jupyter notebooks to explain and demonstrate.
+* __tests__ contains testing resources.  Tests will fail here--- they need to be copied to _ArtBot_ to run successfully.

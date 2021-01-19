@@ -2,7 +2,7 @@ import datetime as dt
 import json
 
 class PostRecord:
-    def __init__(self, subject=None, date=None):
+    def __init__(self, subject=None, date=None, post_text=None):
         if subject:
             self.subject = subject
         else:
@@ -11,6 +11,7 @@ class PostRecord:
             self.date = date
         else:
             self.date = dt.date.today()
+        self.post_text = post_text
 
     def __str__(self):
         return f"{self.date.strftime('%Y-%m-%d')} : Posted on {self.subject}."
@@ -42,11 +43,11 @@ class PostRecord:
         return json.dumps( self.data_dictionary, indent=1)
 
 class ContentRecord:
-    def __init__(self, subject, post_text, hashtags=[], image_file=None):
-        self.subject    = subject
-        self.post_text  = post_text
-        self.hashtags   = hashtags
-        self.image_file = image_file
+    def __init__(self, subject, content, hashtags=[], images=[]):
+        self.subject  = subject
+        self.content  = content
+        self.hashtags = hashtags
+        self.images   = images
 
     def __str__(self):
         return self.as_json
@@ -54,10 +55,10 @@ class ContentRecord:
     @property
     def data_dictionary( self):
         return     {
-            'subject'   : self.subject,
-            'post_text' : self.post_text,
-            'hashtags'  : self.hashtags,
-            'image_file': self.image_file}
+            'Subject'  : self.subject,
+            'Content'  : self.content,
+            'Hashtags' : self.hashtags,
+            'Images'   : self.images}
 
     @property
     def as_json(self):
@@ -76,8 +77,8 @@ class ContentRecord:
             }
         '''
         return ContentRecord(
-            data_dictionary[ 'subject'],
-            data_dictionary[ 'post_text'],
-            hashtags=data_dictionary[ 'hashtags'],
-            image_file=data_dictionary[ 'image_file']
+            data_dictionary[ 'Subject'],
+            data_dictionary[ 'Content'],
+            hashtags=data_dictionary[ 'Hashtags'],
+            images=data_dictionary[ 'Images']
         )
